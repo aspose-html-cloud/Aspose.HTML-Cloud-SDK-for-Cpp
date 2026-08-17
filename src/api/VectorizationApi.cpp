@@ -261,7 +261,7 @@ std::shared_ptr<OperationResult> VectorizationApi::getState(const utility::strin
 
 bool VectorizationApi::isImage(const utility::string_t& format) const
 {
-    return format == _XPLATSTR("bmp") || format == _XPLATSTR("jpeg") || format == _XPLATSTR("tiff") || format == _XPLATSTR("gif") || format == _XPLATSTR("png");
+    return format == _XPLATSTR("bmp") || format == _XPLATSTR("jpeg") || format == _XPLATSTR("tiff") || format == _XPLATSTR("gif") || format == _XPLATSTR("png") || format == _XPLATSTR("webp");
 }
 
 

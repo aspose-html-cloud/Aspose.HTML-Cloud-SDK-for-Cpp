@@ -2,6 +2,7 @@
 #define COM_ASPOSE_API_ConversionRequest_H_
 
 #include "ConversionOptions.h"
+#include "PdfMetadata.h"
 #include "ModelBase.h"
 
 namespace com {
@@ -30,6 +31,7 @@ public:
     ASPOSE_DLL_EXPORT ConversionRequest* setOutputFile(const utility::string_t& value);
     ASPOSE_DLL_EXPORT ConversionRequest* setStorageName(const utility::string_t& value);
     ASPOSE_DLL_EXPORT ConversionRequest* setOptions(const std::shared_ptr<ConversionOptions> value);
+    ASPOSE_DLL_EXPORT ConversionRequest* setPdfMetadata(const std::shared_ptr<PdfMetadata> value);
 
 
 private:
@@ -37,6 +39,7 @@ private:
     utility::string_t m_outputPath;
     boost::optional<utility::string_t> m_storageName;
     std::shared_ptr<ConversionOptions> m_options;
+    std::shared_ptr<PdfMetadata> m_pdfMetadata;
 };
 
 

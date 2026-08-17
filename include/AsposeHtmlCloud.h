@@ -28,4 +28,5 @@
 #include "model/StorageFile.h"
 #include "model/ConversionOptions.h"
 #include "model/ConversionRequest.h"
+#include "model/PdfMetadata.h"
 #endif //__ASPOSE_HTML_CLOUD_H__

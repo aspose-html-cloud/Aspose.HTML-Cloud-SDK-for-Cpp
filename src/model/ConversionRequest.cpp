@@ -26,6 +26,7 @@
 */
 
 #include "model/ConversionRequest.h"
+#include "model/PdfMetadata.h"
 
 namespace com {
 namespace aspose {
@@ -50,6 +51,10 @@ namespace model {
 		if (m_options)
 		{
 			val[utility::conversions::to_string_t("Options")] = m_options->toJson();
+		}
+		if (m_pdfMetadata)
+		{
+			val[utility::conversions::to_string_t("pdfMetadata")] = m_pdfMetadata->toJson();
 		}
 		return val;
 	}
@@ -84,6 +89,11 @@ namespace model {
 	ConversionRequest* ConversionRequest::setOptions(const std::shared_ptr<ConversionOptions> value)
 	{
 		m_options = value;
+		return this;
+	}
+	ConversionRequest* ConversionRequest::setPdfMetadata(const std::shared_ptr<PdfMetadata> value)
+	{
+		m_pdfMetadata = value;
 		return this;
 	}
 

@@ -1,5 +1,5 @@
 ## Possible vectorizations: 
-- JPEG, BMP, PNG, TIFF, GIF -> SVG
+- JPEG, BMP, PNG, TIFF, GIF, WEBP -> SVG
 
 
 <a name="VectorizationApi"></a>

@@ -3,7 +3,7 @@
 AsposeHtml - the C++ library for the Aspose.HTML Cloud API Reference
 
 - API version: 4.0
-- Package version: 22.12.1
+- Package version: 26.8.1
 
 ## Installation
 
@@ -12,7 +12,7 @@ Get ready package or build from source.
 ### Install from command line
 
 ```code
-PM> NuGet\Install-Package aspose.html.cloud.v143 -Version 22.12.1
+PM> NuGet\Install-Package Aspose.Html-Cloud.Cpp -Version 26.8.1
 ```
 
 ### Load from git
@@ -24,12 +24,12 @@ PM> NuGet\Install-Package aspose.html.cloud.v143 -Version 22.12.1
 To use Aspose HTML for Cloud SDK you need to register an account with [Aspose Cloud](https://www.aspose.cloud/) and lookup/create App Key and SID at [Cloud Dashboard](https://dashboard.aspose.cloud/#/apps). There is free quota available. For more details, see [Aspose Cloud Pricing](https://purchase.aspose.cloud/pricing).
 
 ### Possible conversions: 
-- HTML -> PDF, XPS, DOCX, MD, MHTML, JPEG, BMP, PNG, TIFF, GIF
-- EPUB -> PDF, XPS, DOCX, JPEG, BMP, PNG, TIFF, GIF
-- MD -> PDF, XPS, DOCX, HTML, MHTML, JPEG, BMP, PNG, TIFF, GIF
-- MHTML -> PDF, XPS, DOCX, JPEG, BMP, PNG, TIFF, GIF
-- SVG -> PDF, XPS, JPEG, BMP, PNG, TIFF, GIF
-- JPEG, BMP, PNG, TIFF, GIF -> SVG
+- HTML -> PDF, XPS, DOCX, MD, MHTML, JPEG, BMP, PNG, TIFF, GIF, WEBP
+- EPUB -> PDF, XPS, DOCX, JPEG, BMP, PNG, TIFF, GIF, WEBP
+- MD -> PDF, XPS, DOCX, HTML, MHTML, JPEG, BMP, PNG, TIFF, GIF, WEBP
+- MHTML -> PDF, XPS, DOCX, JPEG, BMP, PNG, TIFF, GIF, WEBP
+- SVG -> PDF, XPS, JPEG, BMP, PNG, TIFF, GIF, WEBP
+- JPEG, BMP, PNG, TIFF, GIF, WEBP -> SVG
 
 
 All URIs are relative to *https://api.aspose.cloud/v4.0*
@@ -125,6 +125,7 @@ int main(int argc, char* argv[])
 | **ConversionOptions\* ConversionOptions::setTopMargin(double value)**             | Top margin in inches for PDF, XPS, DOCX output formats. In pixels for images.    | Optional |
 | **ConversionOptions\* ConversionOptions::setBottomMargin(double value)**          | Bottom margin in inches for PDF, XPS, DOCX output formats. In pixels for images. | Optional |
 | **ConversionOptions\* ConversionOptions::setJpegQuality(int value)**              | Quality in percent (for PDF conversion only).                                    | Optional |
+| **ConversionOptions\* ConversionOptions::setResolution(int value)**               | DPI for image outputs (PNG, JPEG, BMP, GIF, TIFF, WEBP). Default: 96.           | Optional |
 | **ConversionOptions\* ConversionOptions::setBackground(utility::string_t value)** | CSS background like '#FF0000'. For conversion from SVG only.                     | Optional |
 
 
@@ -141,6 +142,19 @@ int main(int argc, char* argv[])
 | Method                                                           | Description                                   | Note     |
 |------------------------------------------------------------------|-----------------------------------------------|----------|
 | **ConversionOptions\* ConversionOptions::setUseGit(bool value)** | Use git flavor. True or False. Default false. | Optional |
+
+
+### PDF metadata options (PDF output only)
+| Method                                                                                    | Description                                        | Note     |
+|-------------------------------------------------------------------------------------------|----------------------------------------------------| ---------|
+| **PdfMetadata\* PdfMetadata::setTitle(utility::string_t value)**                          | PDF /Title. Default: "Aspose".                    | Optional |
+| **PdfMetadata\* PdfMetadata::setAuthor(utility::string_t value)**                         | PDF /Author. Default: "Aspose".                   | Optional |
+| **PdfMetadata\* PdfMetadata::setSubject(utility::string_t value)**                        | PDF /Subject. Default: "Aspose".                  | Optional |
+| **PdfMetadata\* PdfMetadata::setKeywords(utility::string_t value)**                       | PDF /Keywords. Default: "".                       | Optional |
+| **PdfMetadata\* PdfMetadata::setCreator(utility::string_t value)**                        | PDF /Creator. Default: "Aspose".                  | Optional |
+| **PdfMetadata\* PdfMetadata::setProducer(utility::string_t value)**                       | PDF /Producer. Default: engine version string.    | Optional |
+| **PdfMetadata\* PdfMetadata::setCreationDate(utility::string_t value)**                   | PDF /CreationDate (ISO 8601). Default: now.        | Optional |
+| **PdfMetadata\* PdfMetadata::setModificationDate(utility::string_t value)**               | PDF /ModDate (ISO 8601). Default: now.             | Optional |
 
 
 ### Vectorization options for trace to the SVG format

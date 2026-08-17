@@ -72,6 +72,10 @@ web::json::value ConversionOptions::toJson() const
     {
         val[utility::conversions::to_string_t("jpegquality")] = ModelBase::toJson(*m_jpeg_quality);
     }
+    if (m_resolution)
+    {
+        val[utility::conversions::to_string_t("resolution")] = ModelBase::toJson(*m_resolution);
+    }
     if (m_background)
     {
         val[utility::conversions::to_string_t("background")] = ModelBase::toJson(*m_background);
@@ -156,6 +160,12 @@ ConversionOptions* ConversionOptions::setBottomMargin(double value)
 ConversionOptions* ConversionOptions::setJpegQuality(int value)
 {
     m_jpeg_quality = value;
+    return this;
+}
+
+ConversionOptions* ConversionOptions::setResolution(int value)
+{
+    m_resolution = value;
     return this;
 }
 
