@@ -54,3 +54,20 @@ Release/
 x64/**/*
 testresult/*.*
 *.pfx
+
+# Local signing / publishing secrets (see signing.local.env.example)
+signing.local.env
+*.local.env
+*.local.md
+
+# Signing tooling and packaging artefacts (kept locally, not versioned)
+CodeSignTool/
+cert_files/
+aspose-pty-ltd-*.zip
+pkg_extract*/
+signed/
+*.nupkg
+sign_stdout.txt
+sign_stderr.txt
+help_out.txt
+help_err.txt
