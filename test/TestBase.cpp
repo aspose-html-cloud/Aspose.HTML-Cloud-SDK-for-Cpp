@@ -32,6 +32,34 @@
 
 namespace
 {
+	// Reads an environment variable; empty when unset. _dupenv_s keeps the
+	// MSVC SDL checks (C4996 on getenv) happy.
+	std::string read_env(const char* name)
+	{
+#ifdef _MSC_VER
+		char* buffer = nullptr;
+		size_t size = 0;
+		std::string value;
+		if (_dupenv_s(&buffer, &size, name) == 0 && buffer != nullptr)
+		{
+			value = buffer;
+		}
+		std::free(buffer);
+		return value;
+#else
+		const char* value = std::getenv(name);
+		return value ? std::string(value) : std::string();
+#endif
+	}
+
+	// Settings are ASCII (keys, ids, paths). A plain widening copy avoids
+	// utility::conversions, which aspose.html.cloud.dll links statically and
+	// does not export to the test executable.
+	utility::string_t to_string_t(const std::string& value)
+	{
+		return utility::string_t(value.begin(), value.end());
+	}
+
 	// Reads a setting from the environment. When `fallback` is nullptr the
 	// setting is required: credentials are never stored in the repository, so
 	// set ASPOSE_CLIENT_ID and ASPOSE_CLIENT_SECRET (or the APP_SID / APP_KEY
@@ -48,10 +76,10 @@ namespace
 				continue;
 			}
 
-			const char* value = std::getenv(name);
-			if (value != nullptr && *value != '\0')
+			const std::string value = read_env(name);
+			if (!value.empty())
 			{
-				return utility::conversions::to_string_t(std::string(value));
+				return to_string_t(value);
 			}
 		}
 
@@ -64,7 +92,7 @@ namespace
 			std::exit(2);
 		}
 
-		return utility::conversions::to_string_t(std::string(fallback));
+		return to_string_t(std::string(fallback));
 	}
 }
 

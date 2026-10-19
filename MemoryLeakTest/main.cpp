@@ -2,6 +2,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <string>
 
 using namespace com::aspose::api;
 
@@ -10,13 +11,29 @@ using namespace com::aspose::api;
 // as ASPOSE_CLIENT_ID / ASPOSE_CLIENT_SECRET before running.
 static utility::string_t required_env(const char* name)
 {
-    const char* value = std::getenv(name);
-    if (value == nullptr || *value == '\0')
+    std::string value;
+#ifdef _MSC_VER
+    char* buffer = nullptr;
+    size_t size = 0;
+    if (_dupenv_s(&buffer, &size, name) == 0 && buffer != nullptr)
+    {
+        value = buffer;
+    }
+    std::free(buffer);
+#else
+    const char* raw = std::getenv(name);
+    if (raw != nullptr)
+    {
+        value = raw;
+    }
+#endif
+    if (value.empty())
     {
         std::fprintf(stderr, "Missing Aspose Cloud credentials: set %s in the environment.\n", name);
         std::exit(2);
     }
-    return utility::conversions::to_string_t(std::string(value));
+    // Keys are ASCII; widen without utility::conversions (not exported by the SDK dll).
+    return utility::string_t(value.begin(), value.end());
 }
 
 
