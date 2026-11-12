@@ -272,3 +272,40 @@ TEST_F(TestVectorizeToSVGApi, /*DISABLED_*/ToSVGStorageToStorageWithOpts)
         ASSERT_FALSE(result_exist->isFolder());
     }
 }
+// Cross-SDK scenario: the output path is passed as a user would (no leading '/').
+// The result must land at exactly that storage path, not only at the path the
+// API reports back.
+TEST_F(TestVectorizeToSVGApi, /*DISABLED_*/ToSVGStorageToStorageLandsAtRequestedPath)
+{
+    utility::string_t inputFolder = _XPLATSTR("HtmlTestDoc");
+    utility::string_t storage = _XPLATSTR("");
+    boost::optional<utility::string_t> versionId = _XPLATSTR("");
+
+    std::shared_ptr<HttpContent> file(new HttpContent(testSource, name + _XPLATSTR("png")));
+    auto res = storage_api->uploadFile(inputFolder, file, storage).get();
+    ASSERT_FALSE(res->errorsIsSet());
+    ASSERT_FALSE(res->getUploaded().empty());
+    utility::string_t src = res->getUploaded()[0];
+
+    utility::string_t dst = _XPLATSTR("HtmlDocCPP/VectorizeStorToStorRequestedPath.svg");
+
+    // Remove a result left over from a previous run so it cannot mask a miss.
+    try
+    {
+        storage_api->deleteFile(dst, versionId, storage).get();
+    }
+    catch (...)
+    {
+    }
+
+    auto result = api->vectorizeStorageToStorage(src, dst, storage);
+
+    ASSERT_EQ(result->getStatus(), utility::string_t(_XPLATSTR("completed")));
+    std::wcout << L"Requested: " << dst << L", reported: " << result->getFile() << std::endl;
+
+    auto result_exist = storage_api->objectExists(dst, versionId, storage).get();
+
+    ASSERT_TRUE(result_exist->isExists()) << "Result not found at the requested storage path; API reported "
+        << result->getFile();
+    ASSERT_FALSE(result_exist->isFolder());
+}

@@ -423,3 +423,79 @@ TEST_F(TestHtmlConversionApi, /*DISABLED_*/testUrlToStorageImages)
         ASSERT_FALSE(result_exist->isFolder());
     }
 }
+
+// Cross-SDK scenario: the output path is passed as a user would (no leading '/').
+// The result must land at exactly that storage path, not only at the path the
+// API reports back.
+TEST_F(TestHtmlConversionApi, /*DISABLED_*/testStorageToStorageLandsAtRequestedPath)
+{
+    utility::string_t inputFolder = _XPLATSTR("HtmlTestDoc");
+    utility::string_t storage = _XPLATSTR("");
+    boost::optional<utility::string_t> versionId = _XPLATSTR("");
+
+    std::shared_ptr<HttpContent> file(new HttpContent(testSource, name));
+    auto res = storage_api->uploadFile(inputFolder, file, storage).get();
+    ASSERT_FALSE(res->errorsIsSet());
+    ASSERT_FALSE(res->getUploaded().empty());
+    utility::string_t src = res->getUploaded()[0];
+
+    utility::string_t dst = _XPLATSTR("HtmlDocCPP/StorToStorRequestedPath.pdf");
+
+    // Remove a result left over from a previous run so it cannot mask a miss.
+    try
+    {
+        storage_api->deleteFile(dst, versionId, storage).get();
+    }
+    catch (...)
+    {
+    }
+
+    auto result = api->convertStorageToStorage(src, dst, storage);
+
+    ASSERT_EQ(result->getStatus(), utility::string_t(_XPLATSTR("completed")));
+    std::wcout << L"Requested: " << dst << L", reported: " << result->getFile() << std::endl;
+
+    auto result_exist = storage_api->objectExists(dst, versionId, storage).get();
+
+    ASSERT_TRUE(result_exist->isExists()) << "Result not found at the requested storage path; API reported "
+        << result->getFile();
+    ASSERT_FALSE(result_exist->isFolder());
+}
+
+// Cross-SDK scenario: a multi-page image conversion returns a zip named after
+// the requested output file (<output>.zip), e.g. testfile.png.zip.
+TEST_F(TestHtmlConversionApi, /*DISABLED_*/testLocalToLocalMultiPageImagesReturnOutputNameZip)
+{
+    utility::string_t formats[] = { L"png", L"jpeg", L"bmp", L"gif" };
+    utility::string_t src = testSource + _XPLATSTR("html_file_long.html");
+
+    std::shared_ptr<ConversionOptions> opts = std::make_shared<ConversionOptions>();
+    opts->setHeight(300)
+        ->setWidth(1000)
+        ->setLeftMargin(10)
+        ->setRightMargin(10)
+        ->setTopMargin(10)
+        ->setBottomMargin(10);
+
+    for (int i = 0; i < sizeof(formats) / sizeof(formats[0]); ++i)
+    {
+        utility::string_t dst = testResult + L"testfile." + formats[i];
+        utility::string_t expected = L"testfile." + formats[i] + L".zip";
+
+        auto result = api->convertLocalToLocal(src, dst, opts);
+
+        EXPECT_EQ(result->getStatus(), utility::string_t(_XPLATSTR("completed")));
+
+        auto re = result->getFile();
+        std::ifstream f(re.c_str(), std::ios::binary | std::ios::ate);
+        EXPECT_TRUE(f.good()) << "Result file is missing";
+        EXPECT_GT(static_cast<long long>(f.tellg()), 0) << "Result file is empty";
+
+        utility::string_t lower = re;
+        std::transform(lower.begin(), lower.end(), lower.begin(), ::towlower);
+        EXPECT_NE(lower.find(expected), utility::string_t::npos)
+            << "Format " << formats[i]
+            << ": expected result file name to contain " << expected
+            << ", got " << re;
+    }
+}
