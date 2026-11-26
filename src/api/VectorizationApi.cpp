@@ -119,7 +119,7 @@ std::shared_ptr<OperationResult> VectorizationApi::vectorize(
     }
 
     index = dst.find_last_of(_XPLATSTR("/\\"));
-    utility::string_t outFile = dstInLocal ? dst.substr(index + 1) : dst;
+    utility::string_t outFile = dstInLocal ? dst.substr(index + 1) : ApiClient::toStorageOutputPath(dst);
     utility::string_t outFolder = dst.substr(0, index + 1);
 
     index = dst.find_last_of(_XPLATSTR("."));

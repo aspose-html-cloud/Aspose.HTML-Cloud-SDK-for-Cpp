@@ -32,6 +32,12 @@ public:
     static utility::string_t parameterToString(float value);
     static utility::string_t parameterToString(const utility::datetime &value);
 
+    // Makes a storage destination path absolute for the conversion API: a path
+    // without a leading '/' is treated by the server as a bare file name and
+    // the result goes to a temporary folder. Paths with a scheme ("xxx://")
+    // are returned unchanged.
+    static utility::string_t toStorageOutputPath(const utility::string_t& path);
+
     template<class T>
     static utility::string_t parameterToArrayString(std::vector<T> value)
     {

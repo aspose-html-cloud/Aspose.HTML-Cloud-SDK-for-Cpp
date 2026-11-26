@@ -142,7 +142,7 @@ std::shared_ptr<OperationResult> ConversionApi::convert(
         fileInStorage = result->getUploaded()[0];
     }
     size_t index = dst.find_last_of(_XPLATSTR("/\\"));
-    utility::string_t outFile = dstInLocal ? dst.substr(index + 1) : dst;
+    utility::string_t outFile = dstInLocal ? dst.substr(index + 1) : ApiClient::toStorageOutputPath(dst);
     utility::string_t outFolder = dst.substr(0, index + 1);
 
     utility::string_t inputFormat = _XPLATSTR("html");

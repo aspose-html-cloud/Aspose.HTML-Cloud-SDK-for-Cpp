@@ -30,6 +30,8 @@
 #include "MultipartFormData.h"
 #include "ModelBase.h"
 
+#include <algorithm>
+
 
 namespace com {
 namespace aspose {
@@ -79,6 +81,24 @@ utility::string_t ApiClient::parameterToString(float value)
 utility::string_t ApiClient::parameterToString(const utility::datetime &value)
 {
     return utility::conversions::to_string_t(value.to_string(utility::datetime::ISO_8601));
+}
+
+utility::string_t ApiClient::toStorageOutputPath(const utility::string_t& path)
+{
+    if (path.find(_XPLATSTR("://")) != utility::string_t::npos)
+    {
+        return path;
+    }
+
+    utility::string_t result = path;
+    std::replace(result.begin(), result.end(), _XPLATSTR('\\'), _XPLATSTR('/'));
+
+    if (result.empty() || result[0] != _XPLATSTR('/'))
+    {
+        result = _XPLATSTR("/") + result;
+    }
+
+    return result;
 }
 
 pplx::task<web::http::http_response> ApiClient::callApi(
